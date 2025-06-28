@@ -1,0 +1,76 @@
+{% extends "flatpages/default.html" %}
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация пользователя</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 100px;
+        }
+        .card {
+            border-radius: 10px;
+        }
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>Регистрация</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">Имя пользователя</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                            {% if form.username.errors %}
+                                <div class="text-danger">{{ form.username.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password1">Пароль</label>
+                            <input type="password" class="form-control" id="password1" name="password1" required>
+                            {% if form.password1.errors %}
+                                <div class="text-danger">{{ form.password1.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password2">Подтверждение пароля</label>
+                            <input type="password" class="form-control" id="password2" name="password2" required>
+                            {% if form.password2.errors %}
+                                <div class="text-danger">{{ form.password2.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

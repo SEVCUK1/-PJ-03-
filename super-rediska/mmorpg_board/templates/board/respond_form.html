@@ -1,0 +1,11 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h2>Оставить отклик</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Отправить отклик</button>
+    <a href="{% url 'post_list' %}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}

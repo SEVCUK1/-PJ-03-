@@ -1,0 +1,66 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_extras %}
+{% load custom_filters %}
+{% load custom_tags %}
+
+{% block title %}
+News
+{% endblock title %}
+
+{% block content %}
+    <h1>Все посты</h1>
+    <h3>{{ filterset.qs.count }} постов</h3>
+
+    <form action="" method="get">
+        {{ filterset.form.as_p }}
+        <input type="submit" value="Найти" />
+    </form>
+    <hr>
+    {% if perms.board.add_post %}
+        <a href="{% url 'post_create' %}">Добавить пост</a>
+    {% endif %}
+
+    {% if posts %}
+        <table>
+            <tr>
+                <td><b>Заголовок</b></td>
+                <td><b>Дата публикации</b></td>
+                <td><b>Текст</b></td>
+                <td><b>Категория</b></td>
+                {% if perms.board.change_post or perms.board.delete_post %}
+                    <td><b>Действия</b></td>
+                {% endif %}
+            </tr>
+            {% for post in posts %}
+                <tr>
+                    <td>{{ post.title }}</td>
+                    <td>{{ post.dateCreation|date:'d M Y' }}</td>
+                    <td>{{ post.text|truncatewords:20 }}</td>
+                    <td>{{ post.category }}</td>
+                    <td>{{ post.id }}</td>
+                    <td><a href="{% url 'post_detail' post.id %}">Читать далее</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <h2>Постов нет!</h2>
+    {% endif %}
+
+    {% if page_obj.has_previous %}
+        <a href="?page=1">1</a>
+        {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+        {% endif %}
+   {% endif %}
+
+   {{ page_obj.number }}
+
+   {% if page_obj.has_next %}
+       <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+{% endblock content %}

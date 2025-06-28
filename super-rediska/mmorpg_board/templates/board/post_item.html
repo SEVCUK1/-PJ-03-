@@ -1,0 +1,38 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}{{ post.title }}{% endblock title %}
+
+{% block content %}
+    <br><br>
+    <h2>{{ post.title }}</h2>
+    <span>{{ post.text }}<br></span>
+    {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 300px;">
+    {% endif %}
+    <hr>
+    <span>| Автор: {{ post.author.username }}</span>
+    <span>| Категория: {{ post.get_category_display }}</span>
+    <span>| Дата публикации: {{ post.dateCreation|date:'d-M-Y H:i' }}</span>
+
+    <br><br>
+
+    <a class="btn btn-secondary" href="{% url 'index' %}" role="button">Закрыть</a>
+    
+    {% if user.is_authenticated and user == post.author %}
+        <a class="btn btn-secondary" href="{% url 'post_edit' post.id %}" role="button">Редактировать</a>
+        <a class="btn btn-danger" href="{% url 'post_delete' post.id %}" role="button">Удалить</a>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <br><br>
+        {% if respond == "Откликнулся" %}
+            <span style="color:red">Вы откликнулись на это объявление.</span><br>
+            <a href="{% url 'comments' %}">Посмотреть свои отклики</a>
+        {% elif respond == "Мое_объявление" %}
+            <span style="color:red">Вы не можете откликнуться на свое объявление.</span><br>
+        {% else %}
+            <a class="btn btn-secondary" href="{% url 'add_comment' %}?post_id={{ post.id }}" role="button">Откликнуться</a>
+        {% endif %}
+    {% endif %}
+    <br><br>
+{% endblock content %}

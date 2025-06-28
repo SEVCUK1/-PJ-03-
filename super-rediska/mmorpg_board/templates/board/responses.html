@@ -1,0 +1,52 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h1>Мои отклики</h1>
+
+<!-- Форма фильтрации -->
+<form method="get">
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Фильтровать</button>
+</form>
+
+<hr>
+
+<h2>Отклики на мои объявления</h2>
+{% if filter_responses %}
+    <ul>
+    {% for response in filter_responses %}
+        <li>
+            <strong>{{ response.ad.title }}</strong><br>
+            {{ response.text }}<br>
+            <small>От {{ response.author.username }} ({{ response.created_at|date:"d.m.Y H:i" }})</small>
+            {% if not response.accepted %}
+                <a href="{% url 'response_accept' response.id %}" class="btn btn-sm btn-success">Принять</a>
+            {% endif %}
+            <a href="{% url 'response_delete' response.id %}" class="btn btn-sm btn-danger">Удалить</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Нет откликов на ваши объявления</p>
+{% endif %}
+
+<hr>
+
+<h2>Мои отклики</h2>
+{% if myresponses %}
+    <ul>
+    {% for response in myresponses %}
+        <li>
+            <strong>{{ response.ad.title }}</strong><br>
+            {{ response.text }}<br>
+            <small>{{ response.created_at|date:"d.m.Y H:i" }}</small>
+            {% if response.accepted %}
+                <span class="badge bg-success">Принято</span>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Вы не оставляли откликов</p>
+{% endif %}
+{% endblock %}
